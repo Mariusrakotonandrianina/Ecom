@@ -224,6 +224,9 @@ export const findTopSoldProductsInMonth = async (req, res) => {
       {
         $sort: { totalSolde: -1 },
       },
+      {
+        $limit: 20,
+      },
     ]);
 
     if (topProducts.length > 0) {
@@ -333,6 +336,40 @@ export const checkStockAndTriggerAlert = async (req, res) => {
   } catch (error) {
     console.error("Erreur lors de la vérification de l'épuisement du stock :", error);
     res.status(500).json({ error: "Une erreur s'est produite." });
+  }
+};
+export const calculateAverageDailyRevenue = async () => {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const dailyRevenueData = await Achats.aggregate([
+      {
+        $match: {
+          dateAchat: {
+            $gte: thirtyDaysAgo,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$dateAchat" } },
+          totalSolde: { $sum: "$soldeTotal" },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    const totalDays = dailyRevenueData.length;
+    const totalRevenue = dailyRevenueData.reduce((acc, data) => acc + data.totalSolde, 0);
+    const averageDailyRevenue = totalRevenue / totalDays;
+
+    return { averageDailyRevenue };
+  } catch (error) {
+    console.error(error);
+    throw new Error('Internal Server Error');
   }
 };
 

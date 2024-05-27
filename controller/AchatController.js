@@ -1,4 +1,4 @@
-import Achats from "../model/achat.js";
+ import Achats from "../model/achat.js";
 import Products from "../model/addProduct.js";
 import { checkStockAndTriggerAlert } from "../controller/EvaluationController.js";
 import stripe from "stripe";
@@ -141,7 +141,7 @@ export const processPayment = async (req, res) => {
   try {
     const { amount, paymentMethod } = req.body;
 
-    const amountInCents = amount;
+    const amountInCents = amount * 100;
 
     const stripe = req.app.locals.stripe;
 
@@ -151,7 +151,7 @@ export const processPayment = async (req, res) => {
       payment_method: paymentMethod,
       confirmation_method: "manual",
       confirm: true,
-      return_url: "http://localhost:3001",
+      return_url: "http://localhost:3001/product/product",
     });
 
     const clientEmail = paymentIntent?.charges?.data[0]?.billing_details?.email;
@@ -163,3 +163,17 @@ export const processPayment = async (req, res) => {
   }
 };
 
+export const getHistoriqueAchatsUtilisateur = async (req, res) => {
+  try {
+    const utilisateurConnecteEmail = req.query.email;
+
+    const historiqueAchats = await Achats.find({ email: utilisateurConnecteEmail })
+      .populate('product') 
+      .sort({ dateAchat: -1 });
+
+    res.status(200).json({ historiqueAchats });
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l\'historique des achats :', error);
+    res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'historique des achats.' });
+  }
+};

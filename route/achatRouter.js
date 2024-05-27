@@ -10,7 +10,9 @@ import {
   calculateDailyTotalSumForDateRange,
   chartMounthly,
   checkStockAndTriggerAlert,
+  calculateAverageDailyRevenue,
 } from "../controller/EvaluationController.js";
+import { getHistoriqueAchatsUtilisateur } from "../controller/AchatController.js";
 
 const achatRouter = express.Router();
 
@@ -29,5 +31,7 @@ achatRouter.get("/chart", calculateDailyTotalSumForDateRange);
 achatRouter.get("/salesChart", chartMounthly);
 achatRouter.get("/checkStock", checkStockAndTriggerAlert);
 achatRouter.post("/processpayment", processPayment);
+achatRouter.get("/avg", calculateAverageDailyRevenue);
+achatRouter.get("/historiqueAchats", getHistoriqueAchatsUtilisateur);
 
 export default achatRouter;

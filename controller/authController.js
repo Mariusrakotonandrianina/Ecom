@@ -103,7 +103,7 @@ export const updateAdminInfo = async (req, res) => {
     );
 
     if (!admin) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({ message: "Admin not found" });
     }
 
     res.status(200).json({ admin });

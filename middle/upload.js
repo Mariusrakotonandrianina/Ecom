@@ -7,14 +7,13 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Fonction pour générer un nom de fichier unique
 function generateUniqueFilename(file) {
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
   const ext = path.extname(file.originalname);
   return file.fieldname + '-' + uniqueSuffix + ext;
 }
 
-const destination2 = path.join(__dirname, '../../front-test/public/images/imgProduct'); // Déplacez cette ligne ici
+const destination2 = path.join(__dirname, '../../front-test/public/images/imgProduct');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

@@ -15,7 +15,7 @@ import authRouter from "./route/auth.js";
 import userRouter from "./route/userRouter.js";
 
 const app = express();
-const stripe = stripePackage("sk_test_51NxFJkCLci3B102StaLn2SbhOS9ON0znomS2f963a6pPoWDrTfexqeGEdmLRN17qciYEb78x330Tzo291fDkS2Kr00Hzxa6Cqt");
+const stripe = stripePackage("sk_test_51NxFJkCLci3B102StaLnn2SbhOS9ON0znomS2f963a6pPoWDrTfexqeGEdmLRN17qciYEb78x330Tzo291fDkS2Kr00Hzxa6Cqt");
 
 const connect = async () => {
   try {
